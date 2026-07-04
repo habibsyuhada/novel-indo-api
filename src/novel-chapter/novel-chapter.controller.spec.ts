@@ -13,8 +13,10 @@ describe('NovelChapterController', () => {
         {
           provide: NovelChapterService,
           useValue: {
+            create: jest.fn().mockResolvedValue({}),
             findAll: jest.fn().mockResolvedValue([]),
             findOne: jest.fn().mockResolvedValue({}),
+            update: jest.fn().mockResolvedValue({}),
             remove: jest.fn().mockResolvedValue({}),
           },
         },

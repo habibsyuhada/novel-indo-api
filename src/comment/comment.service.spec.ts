@@ -15,8 +15,11 @@ describe('CommentService', () => {
         {
           provide: getRepositoryToken(Comment),
           useValue: {
+            create: jest.fn().mockReturnValue({}),
+            save: jest.fn().mockResolvedValue({}),
             find: jest.fn().mockResolvedValue([]),
             findOne: jest.fn().mockResolvedValue({}),
+            update: jest.fn().mockResolvedValue({}),
             delete: jest.fn().mockResolvedValue({}),
           },
         },
