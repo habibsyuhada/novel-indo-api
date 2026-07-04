@@ -17,17 +17,27 @@ export class NovelChapterService {
     return this.novelChapterRepository.save(newNovelChapter);
   }
 
-  findAll() {
-    return this.novelChapterRepository.find();
+  private getSelectOptions(includeText: boolean) {
+    return includeText 
+      ? undefined 
+      : ['id', 'novel', 'chapter', 'title', 'created_date', 'url', 'report'] as any;
   }
 
-  findOne(id: number | string) {
-    return this.novelChapterRepository.findOne({ where: { id: id as any } });
+  findAll(includeText: boolean = false) {
+    return this.novelChapterRepository.find({ select: this.getSelectOptions(includeText) });
   }
 
-  findOneByNovelAndChapter(novelId: number, chapter: number) {
+  findOne(id: number | string, includeText: boolean = false) {
     return this.novelChapterRepository.findOne({ 
-      where: { novel: novelId, chapter: chapter } 
+      where: { id: id as any },
+      select: this.getSelectOptions(includeText)
+    });
+  }
+
+  findOneByNovelAndChapter(novelId: number, chapter: number, includeText: boolean = false) {
+    return this.novelChapterRepository.findOne({ 
+      where: { novel: novelId, chapter: chapter },
+      select: this.getSelectOptions(includeText)
     });
   }
 
