@@ -34,6 +34,19 @@ export class NovelChapterController {
     return this.novelChapterService.findOne(id);
   }
 
+  @Get('novel/:novelId/chapter/:chapter')
+  @ApiOperation({ summary: 'Get a single novel-chapter by novel ID and chapter number' })
+  @ApiParam({ name: 'novelId', description: 'The ID of the novel', type: 'number' })
+  @ApiParam({ name: 'chapter', description: 'The chapter number', type: 'number' })
+  @ApiResponse({ status: 200, description: 'Return a single novel-chapter.', type: NovelChapter })
+  @ApiResponse({ status: 404, description: 'NovelChapter not found.' })
+  findOneByNovelAndChapter(
+    @Param('novelId') novelId: string, 
+    @Param('chapter') chapter: string
+  ) {
+    return this.novelChapterService.findOneByNovelAndChapter(+novelId, +chapter);
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Update a novel-chapter' })
   @ApiParam({ name: 'id', description: 'The ID of the novel-chapter', type: 'string' })

@@ -25,6 +25,12 @@ export class NovelChapterService {
     return this.novelChapterRepository.findOne({ where: { id: id as any } });
   }
 
+  findOneByNovelAndChapter(novelId: number, chapter: number) {
+    return this.novelChapterRepository.findOne({ 
+      where: { novel: novelId, chapter: chapter } 
+    });
+  }
+
   update(id: number | string, updateNovelChapterDto: UpdateNovelChapterDto) {
     return this.novelChapterRepository.update(id, updateNovelChapterDto as any);
   }
