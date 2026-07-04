@@ -20,7 +20,15 @@ export class NovelChapterService {
   private getSelectOptions(includeText: boolean) {
     return includeText 
       ? undefined 
-      : ['id', 'novel', 'chapter', 'title', 'created_date', 'url', 'report'] as any;
+      : {
+          id: true,
+          novel: true,
+          chapter: true,
+          title: true,
+          created_date: true,
+          url: true,
+          report: true
+        };
   }
 
   findAll(includeText: boolean = false) {
