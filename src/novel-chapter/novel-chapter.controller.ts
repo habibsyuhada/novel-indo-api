@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, NotFoundException } from '@nestjs/common';
 import { NovelChapterService } from './novel-chapter.service';
 import { CreateNovelChapterDto } from './dto/create-novel-chapter.dto';
 import { UpdateNovelChapterDto } from './dto/update-novel-chapter.dto';
@@ -33,9 +33,13 @@ export class NovelChapterController {
   @ApiQuery({ name: 'includeText', required: false, type: 'boolean', description: 'Whether to include the chapter text content' })
   @ApiResponse({ status: 200, description: 'Return a single novel-chapter.', type: NovelChapter })
   @ApiResponse({ status: 404, description: 'NovelChapter not found.' })
-  findOne(@Param('id') id: string, @Query('includeText') includeText?: string) {
+  async findOne(@Param('id') id: string, @Query('includeText') includeText?: string) {
     const shouldIncludeText = includeText === 'true';
-    return this.novelChapterService.findOne(id, shouldIncludeText);
+    const chapter = await this.novelChapterService.findOne(id, shouldIncludeText);
+    if (!chapter) {
+      throw new NotFoundException(`Chapter with ID ${id} not found`);
+    }
+    return chapter;
   }
 
   @Get('novel/:novelId/chapter/:chapter')
@@ -45,13 +49,17 @@ export class NovelChapterController {
   @ApiQuery({ name: 'includeText', required: false, type: 'boolean', description: 'Whether to include the chapter text content' })
   @ApiResponse({ status: 200, description: 'Return a single novel-chapter.', type: NovelChapter })
   @ApiResponse({ status: 404, description: 'NovelChapter not found.' })
-  findOneByNovelAndChapter(
+  async findOneByNovelAndChapter(
     @Param('novelId') novelId: string, 
-    @Param('chapter') chapter: string,
+    @Param('chapter') chapterNum: string,
     @Query('includeText') includeText?: string
   ) {
     const shouldIncludeText = includeText === 'true';
-    return this.novelChapterService.findOneByNovelAndChapter(+novelId, +chapter, shouldIncludeText);
+    const chapter = await this.novelChapterService.findOneByNovelAndChapter(+novelId, +chapterNum, shouldIncludeText);
+    if (!chapter) {
+      throw new NotFoundException(`Chapter ${chapterNum} for Novel ${novelId} not found`);
+    }
+    return chapter;
   }
 
   @Patch(':id')
